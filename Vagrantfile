@@ -8,8 +8,9 @@ Vagrant.configure("2") do |config|
   # Forward TLS docker port
   config.vm.network "forwarded_port", guest: 2375, host: 12375, auto_correct: true
 
-  (1..2).each do |i|
+  (1..3).each do |i|
     config.vm.define "photon-#{i}" do |node|
+      node.vm.network "private_network", ip: "172.16.111.#{100+i}"
     end
   end
 
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
     vb.memory = 1024
     vb.cpus = 1
     vb.linked_clone = true
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
   # Enable and start docker service for remote access

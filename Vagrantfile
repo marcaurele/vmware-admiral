@@ -21,17 +21,13 @@ Vagrant.configure("2") do |config|
   end
 
   # Enable and start docker service for remote access
+  config.vm.provision "file", source: "./dockerd.conf", destination: "/tmp/dockerd.conf"
   config.vm.provision "shell", inline: <<-SHELL
     mkdir -p /etc/systemd/system/docker.service.d
-    cat > /etc/systemd/system/docker.service.d/10-dockerd.conf << EOF
-    [Service]
-    ExecStart=
-    ExecStart=/usr/bin/dockerd -s overlay -H tcp://0.0.0.0:${paramData.Docker.Port} -H unix:///var/run/docker.sock
-    Restart=always
-    EOF
+    cp /tmp/dockerd.conf /etc/systemd/system/docker.service.d/10-dockerd.conf
     systemctl daemon-reload
     iptables -A INPUT -p tcp --dport 2375 -j ACCEPT
     systemctl enable docker.service
-    systemctl start docker.service
+    systemctl restart docker.service
     SHELL
   end

@@ -1,0 +1,6 @@
+version: '3'
+services:
+  admiral:
+    image: vmware/admiral:v1.5.0
+    ports:
+      - "8282:8282"

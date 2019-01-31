@@ -1,0 +1,22 @@
+---
+
+version: '2'
+
+services:
+  web-server:
+    image: crccheck/hello-world
+    ports:
+      - "8000:8000"
+    networks:
+      - secured-network 
+ alpine:
+    image: alpine
+    networks:
+      - secured-network
+
+
+networks:
+  secured-network:
+    driver: overlay
+    driver_opts:
+      encrypted: ""

@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
       # Enable and start docker service for remote access
       node.vm.provision "file", source: "./dockerd.conf", destination: "/tmp/dockerd.conf"
       node.vm.provision "shell", inline: <<-SHELL
-        tdnf updte -y
+        tdnf update -y
         mkdir -p /etc/systemd/system/docker.service.d
         cp /tmp/dockerd.conf /etc/systemd/system/docker.service.d/10-dockerd.conf
         systemctl daemon-reload
